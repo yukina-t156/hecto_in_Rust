@@ -51,7 +51,7 @@ impl Editor {
     }
     
     fn draw_rows(&self) {
-        for _ in 0..self.terminal.size().height { // エディタの高さ分繰り返す
+        for _ in 0..self.terminal.size().height-1 { // エディタの高さ分繰り返す
             println!("~\r");
         }
     }
