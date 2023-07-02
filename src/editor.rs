@@ -32,9 +32,9 @@ impl Editor {
 
     fn refresh_screen(&self) -> Result<(), std::io::Error> {
         Terminal::cursor_hide();
-        Terminal::clear_screen();
         Terminal::cursor_position(0, 0);
         if self.should_quit {
+            Terminal::clear_screen();
             println!("Goodbye.\r");
         } else {
             self.draw_rows();
@@ -54,6 +54,7 @@ impl Editor {
     
     fn draw_rows(&self) {
         for _ in 0..self.terminal.size().height-1 { // エディタの高さ分繰り返す
+            Terminal::clear_current_line();
             println!("~\r");
         }
     }
