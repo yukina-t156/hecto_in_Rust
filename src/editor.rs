@@ -56,7 +56,8 @@ impl Editor {
         let pressed_key = Terminal::read_key()?;
         match pressed_key {
             Key::Ctrl('c') => self.should_quit = true,
-            Key::Up | Key::Down | Key::Left | Key::Right => self.move_cursor(pressed_key),
+            Key::Up | Key::Down | Key::Left | Key::Right =>
+                              self.move_cursor(pressed_key),
             _ => (),
         }
         Ok(())
@@ -64,11 +65,23 @@ impl Editor {
     
     fn move_cursor(&mut self, key: Key) {
         let Position { mut y, mut x } = self.cursor_position;
+        let size = self.terminal.size();
+        let height = size.height.saturating_sub(1) as usize;
+        let width = size.width.saturating_sub(1) as usize;
+
         match key {
             Key::Up => y = y.saturating_sub(1),
-            Key::Down => y = y.saturating_add(1),
+            Key::Down => {
+                if y < height {
+                    y = y.saturating_add(1);
+                }
+            }
             Key::Left => x = x.saturating_sub(1),
-            Key::Right => x = x.saturating_add(1),
+            Key::Right => {
+                if x < width {
+                    x = x.saturating_add(1);
+                }
+            }
             _ => (),
         }
         self.cursor_position = Position { x, y}
